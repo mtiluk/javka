@@ -1,0 +1,205 @@
+/* src/styles.css */
+.javka-viewport {
+  --javka-bg: rgb(27 27 25);
+  --javka-fg: rgb(226 226 224);
+  --javka-accent: rgb(140 141 138);
+  --javka-border: rgba(37, 38, 35, 0.4);
+  --javka-highlight: rgba(255, 255, 255, 0.08);
+  --javka-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --javka-font:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  --javka-width: 400px;
+  --javka-offset: 20px;
+  --javka-radius: 14px;
+  --javka-padding: 14px;
+  --javka-row-gap: 10px;
+  --javka-title-size: 13px;
+  --javka-desc-size: 12px;
+  --javka-block-h: 5px;
+  --javka-block-gap: 2px;
+  --javka-block-radius: 2px;
+  --javka-block-fade: 350ms;
+  --javka-spent-opacity: 0.12;
+  --javka-exit-duration: 220ms;
+  position: fixed;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: min(var(--javka-width), calc(100vw - 2 * var(--javka-offset)));
+  color: var(--javka-fg);
+}
+.javka-viewport[data-position^=bottom] {
+  bottom: var(--javka-offset);
+}
+.javka-viewport[data-position^=top] {
+  top: var(--javka-offset);
+}
+.javka-viewport[data-position$=right] {
+  right: var(--javka-offset);
+}
+.javka-viewport[data-position$=left] {
+  left: var(--javka-offset);
+}
+.javka-viewport[data-position$=center] {
+  left: 50%;
+  translate: -50% 0;
+}
+.javka-viewport::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  pointer-events: none;
+}
+.javka-viewport[data-position^=bottom]::before {
+  bottom: 0;
+}
+.javka-viewport[data-position^=top]::before {
+  top: 0;
+}
+.javka-viewport[data-expanded=true]::before {
+  height: var(--_javka-stack-h, 0px);
+  pointer-events: auto;
+}
+.javka-toast {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: javka-in 0.25s ease both;
+}
+.javka-viewport[data-position^=bottom] .javka-toast {
+  bottom: 0;
+}
+.javka-viewport[data-position^=top] .javka-toast {
+  top: 0;
+}
+.javka-toast[data-front=true] {
+  position: relative;
+}
+.javka-toast[data-state=closing] {
+  animation: javka-out var(--javka-exit-duration) ease both;
+  pointer-events: none;
+}
+.javka-toast {
+  background: rgb(from var(--javka-bg) r g b / 0.25);
+  padding: var(--javka-padding);
+  border-radius: calc(var(--javka-radius) + 2px);
+  border: 1px solid var(--javka-border);
+  font-family: var(--javka-font);
+}
+.javka-inner {
+  display: flex;
+  flex-direction: column;
+  background: var(--javka-bg);
+  border-radius: var(--javka-radius);
+  padding: var(--javka-padding);
+  box-shadow: inset 0 1px 0 var(--javka-highlight), var(--javka-shadow);
+}
+.javka-row {
+  display: flex;
+  align-items: center;
+  gap: var(--javka-row-gap);
+}
+.javka-toast[data-kind=success] {
+  --javka-accent: rgb(73 218 150);
+}
+.javka-toast[data-kind=error] {
+  --javka-accent: rgb(245 116 111);
+}
+.javka-toast[data-kind=warning] {
+  --javka-accent: rgb(204 170 51);
+}
+.javka-toast[data-kind=info] {
+  --javka-accent: rgb(120 167 245);
+}
+.javka-icon {
+  flex: none;
+  align-self: flex-start;
+  margin-top: 1px;
+  width: 16px;
+  height: 16px;
+}
+.javka-icon > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.javka-content {
+  min-width: 0;
+}
+.javka-title {
+  font-weight: 500;
+  font-size: var(--javka-title-size);
+  margin-bottom: 2px;
+}
+.javka-description {
+  opacity: 0.6;
+  font-size: var(--javka-desc-size);
+}
+.javka-progress {
+  display: grid;
+  grid-template-columns: repeat(var(--javka-block-cols, 32), 1fr);
+  grid-auto-rows: var(--javka-block-h);
+  gap: var(--javka-block-gap);
+  margin-top: 12px;
+}
+.javka-block {
+  border-radius: var(--javka-block-radius);
+  background: var(--javka-accent);
+  filter: brightness(var(--_javka-block-shade, 1));
+  animation: javka-block-spend var(--javka-block-fade) ease-out both;
+  animation-delay: calc((var(--_javka-block-col, 0) / var(--javka-block-cols, 32)) * (var(--_javka-duration, 5000ms) - var(--javka-block-fade)));
+}
+.javka-viewport[data-expanded=true] .javka-block,
+.javka-toast[data-state=closing] .javka-block {
+  animation-play-state: paused;
+}
+@keyframes javka-block-spend {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: var(--javka-spent-opacity);
+  }
+}
+@keyframes javka-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes javka-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+.javka-close {
+  flex: none;
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .javka-toast,
+  .javka-toast[data-state=closing] {
+    transition: none;
+    animation-duration: 1ms;
+  }
+}
+/*# sourceMappingURL=styles.css.map */
