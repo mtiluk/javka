@@ -1,0 +1,102 @@
+/* ============================================================
+   javka — design skeleton
+   ============================================================ */
+
+.javka-viewport {
+    --javka-bg: rgb(27 27 25);
+    --javka-fg: rgb(226 226 224);
+    --javka-accent: rgb(140 141 138);
+    --javka-border: rgba(37, 38, 35, 0.4);
+    --javka-highlight: rgba(255, 255, 255, 0.08);
+    --javka-width: 400px;
+    --javka-gap: 10px;
+
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--javka-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: min(var(--javka-width), calc(100vw - 40px));
+    color: var(--javka-fg);
+}
+
+/* outer pill: glass ring + shape, lit from above */
+.javka-toast {
+    background: rgb(from var(--javka-bg) r g b / 0.25);
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid var(--javka-border);
+}
+
+/* inner card: solid bg + THE layout row
+   [content ......................... ✕]
+   lit from above + soft drop shadow for lift */
+.javka-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* ✕ vertically centered vs title+description */
+    gap: 12px;
+    background: var(--javka-bg);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow:
+        inset 0 1px 0 var(--javka-highlight),
+        0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* per-kind accents */
+.javka-toast[data-kind="success"] {
+    --javka-accent: rgba(73, 218, 150);
+}
+.javka-toast[data-kind="error"] {
+    --javka-accent: rgba(245, 116, 111);
+}
+.javka-toast[data-kind="warning"] {
+    --javka-accent: rgba(204, 170, 51);
+}
+.javka-toast[data-kind="info"] {
+    --javka-accent: rgba(120, 167, 245);
+}
+
+/* icon parked off for now — restore with display: block when wanted */
+.javka-icon {
+    display: none;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    background: var(--javka-accent);
+}
+
+.javka-content {
+    min-width: 0; /* long titles can shrink/wrap, not overflow */
+}
+.javka-title {
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+.javka-description {
+    opacity: 0.6;
+    font-size: 12px;
+}
+
+.javka-progress {
+    height: 14px;
+    margin-top: 12px;
+    background: var(--javka-accent);
+}
+
+.javka-close {
+    flex: none;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 4px 8px;
+}
